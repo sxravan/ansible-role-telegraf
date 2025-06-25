@@ -1,0 +1,13 @@
+[[inputs.cpu]]
+  percpu = true
+  totalcpu = true
+
+[[inputs.mem]]
+
+[[inputs.disk]]
+  ## collect all disks
+  mount_points = ["/"]
+  ignore_fs = ["tmpfs", "devtmpfs"]
+
+[[inputs.net]]
+  interfaces = {{ telegraf_input_systems_net_interfaces }}

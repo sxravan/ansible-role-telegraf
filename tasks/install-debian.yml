@@ -1,0 +1,87 @@
+---
+- name: Download telegraf archive compatibility key
+  ansible.builtin.get_url:
+    url: "{{ telegraf_apt_key_url }}"
+    dest: /tmp/telegraf-archive_compat.key
+    mode: "0644"
+  changed_when: false
+
+- name: Dearmor and install telegraf key into trusted.gpg.d
+  ansible.builtin.command: >
+    gpg --batch --yes --dearmor
+        --output "{{ apt_key_path }}/influxdb2.gpg"
+        /tmp/telegraf-archive_compat.key
+  args:
+    creates: "{{ apt_key_path }}/influxdb2.gpg"
+  changed_when: false
+
+- name: Delete temporary telegraf key file
+  ansible.builtin.file:
+    name: /tmp/telegraf-archive_compat.key
+    state: absent
+  changed_when: false
+
+- name: Add telegraf APT repository
+  ansible.builtin.apt_repository:
+    repo: "{{ telegraf_apt_repo }}"
+    filename: influx
+    state: present
+
+- name: Install Telegraf package
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - "{{ telegraf_apt_package }}"
+
+- name: Apply output configuration file for Telegraf
+  ansible.builtin.template:
+    src: telegraf-output-influxdb.conf.j2
+    dest: /etc/telegraf/telegraf.d/output-influxdb.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Restart Telegraf
+
+- name: Apply input configuration file for Telegraf
+  ansible.builtin.template:
+    src: input-systems.conf.j2
+    dest: /etc/telegraf/telegraf.d/input-systems.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Restart Telegraf
+
+- name: Ensure override directory exists
+  ansible.builtin.file:
+    path: /etc/systemd/system/telegraf.service.d
+    state: directory
+    mode: "0755"
+
+- name: Create systemd override for telegraf
+  ansible.builtin.template:
+    src: ansible-telegraf.conf.j2
+    dest: /etc/systemd/system/telegraf.service.d/ansible-telegraf.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Deploying Telegraf token
+  ansible.builtin.template:
+    src: telegraf.env.j2
+    dest: /etc/telegraf/telegraf.env
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Reload systemd to apply changes
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Ensure Telegraf service is enabled and started
+  ansible.builtin.systemd:
+    name: "{{ telegraf_apt_service }}"
+    enabled: true
+    state: started
