@@ -1,19 +1,15 @@
 ---
-# defaults file for ansible-role-telegraf
-apt_key_path: /etc/apt/trusted.gpg.d
+# InfluxData Key
+telegraf_key_url: "https://repos.influxdata.com/influxdata-archive_compat.key"
 
 # influx APT repository info
+apt_key_path: /etc/apt/trusted.gpg.d
 telegraf_apt_repo: "deb [arch=amd64 signed-by={{ apt_key_path }}/influxdb2.gpg] https://repos.influxdata.com/debian stable main"
-telegraf_key_url: "https://repos.influxdata.com/influxdata-archive_compat.key"
+
+# InfluxData YUM repository info
 telegraf_rpm_repo_baseurl: "https://repos.influxdata.com/rhel/{{ ansible_distribution_major_version }}/$basearch/stable"
+
+# Telegraf package name
 telegraf_package:
   - telegraf
 telegraf_service: telegraf
-telegraf_urls:
-  - "http://graph.ipa.ob.me:8086"
-telegraf_organization: "oilboot"
-telegraf_bucket: "telegraf"
-telegraf_precision: "s"
-telegraf_input_systems_net_interfaces:
-  - "lo"
-  - "eth0"
