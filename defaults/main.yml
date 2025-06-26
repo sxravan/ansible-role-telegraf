@@ -17,4 +17,3 @@ telegraf_service: telegraf
 # Configurations
 telegraf_input_systems_disk_mount_points:
   - /
-telegraf_input_systems_netstat_enabled: true
