@@ -3,3 +3,10 @@
 - name: Include Debian tasks
   ansible.builtin.include_tasks: install-debian.yml
   when: ansible_os_family == 'Debian'
+
+- name: Include RedHat tasks
+  ansible.builtin.include_tasks: install-redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Include configuration tasks
+  ansible.builtin.include_tasks: configure.yml

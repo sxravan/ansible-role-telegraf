@@ -4,10 +4,11 @@ apt_key_path: /etc/apt/trusted.gpg.d
 
 # influx APT repository info
 telegraf_apt_repo: "deb [arch=amd64 signed-by={{ apt_key_path }}/influxdb2.gpg] https://repos.influxdata.com/debian stable main"
-telegraf_apt_key_url: "https://repos.influxdata.com/influxdata-archive_compat.key"
-telegraf_apt_package:
+telegraf_key_url: "https://repos.influxdata.com/influxdata-archive_compat.key"
+telegraf_rpm_repo_baseurl: "https://repos.influxdata.com/rhel/{{ ansible_distribution_major_version }}/$basearch/stable"
+telegraf_package:
   - telegraf
-telegraf_apt_service: telegraf
+telegraf_service: telegraf
 telegraf_urls:
   - "http://graph.ipa.ob.me:8086"
 telegraf_organization: "oilboot"

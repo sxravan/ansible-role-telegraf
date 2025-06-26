@@ -1,0 +1,51 @@
+- name: Apply output configuration file for Telegraf
+  ansible.builtin.template:
+    src: telegraf-output-influxdb.conf.j2
+    dest: /etc/telegraf/telegraf.d/output-influxdb.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Restart Telegraf
+
+- name: Apply input configuration file for Telegraf
+  ansible.builtin.template:
+    src: input-systems.conf.j2
+    dest: /etc/telegraf/telegraf.d/input-systems.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Restart Telegraf
+
+- name: Ensure override directory exists
+  ansible.builtin.file:
+    path: /etc/systemd/system/telegraf.service.d
+    state: directory
+    mode: "0755"
+
+- name: Create systemd override for telegraf
+  ansible.builtin.template:
+    src: ansible-telegraf.conf.j2
+    dest: /etc/systemd/system/telegraf.service.d/ansible-telegraf.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Deploying Telegraf token
+  ansible.builtin.template:
+    src: telegraf.env.j2
+    dest: /etc/telegraf/telegraf.env
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Reload systemd to apply changes
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Ensure Telegraf service is enabled and started
+  ansible.builtin.systemd:
+    name: "{{ telegraf_service }}"
+    enabled: true
+    state: started
