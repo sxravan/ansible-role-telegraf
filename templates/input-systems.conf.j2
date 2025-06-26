@@ -15,7 +15,7 @@
 [[inputs.netstat]]
   ## By default, telegraf will not collect any netstat stats.
   ## Set to true to enable collection of netstat stats.
-  enabled = {{ telegraf_input_systems_netstat_enabled }}
+  enabled = {{ telegraf_input_systems_netstat_enabled | lower }}
 
 [[inputs.system]]
   ## Collect system load and uptime
