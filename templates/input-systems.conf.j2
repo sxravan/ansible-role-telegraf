@@ -13,15 +13,3 @@
   interfaces = {{ telegraf_input_systems_net_interfaces }}
 
 [[inputs.netstat]]
-  ## By default, telegraf will not collect any netstat stats.
-  ## Set to true to enable collection of netstat stats.
-  enabled = {{ telegraf_input_systems_netstat_enabled | lower }}
-
-[[inputs.system]]
-  ## Collect system load and uptime
-  collect_load = true
-  collect_uptime = true
-
-[[inputs.processes]]
-  ## Collect process metrics
-  fieldpass = ["pid", "user", "name", "state", "nice", "priority", "rss", "vsz"]
