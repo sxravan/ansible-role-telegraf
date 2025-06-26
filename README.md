@@ -1,13 +1,16 @@
-# Ansible Role: telegraf
+telegraf
+=========
 
 Installs and configures the Telegraf agent for collecting and shipping metrics.
 
-## Requirements
+Requirements
+------------
 
 - Ansible ≥ 2.9
 - Supported OS: Debian, Ubuntu, RHEL/CentOS/Rocky
 
-## Role Variables
+Role Variables
+--------------
 
 You **must** declare the following variables either in your playbook or in your inventory:
 
@@ -28,7 +31,13 @@ The `vault_telegraf_token` (InfluxDB auth token) can be stored in an Ansible Vau
 export vault_telegraf_token="YOUR_TOKEN"
 ```
 
-## Example Playbook
+Dependencies
+------------
+
+None
+
+Example Playbook
+----------------
 
 ```yaml
 - hosts: all
@@ -45,3 +54,13 @@ export vault_telegraf_token="YOUR_TOKEN"
           - "eth0"
         vault_telegraf_token: "YOUR_TOKEN"
 ```
+
+License
+-------
+
+MIT
+
+Author Information
+------------------
+
+shravandwarka97@gmail.com
