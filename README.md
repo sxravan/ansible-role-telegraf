@@ -1,38 +1,47 @@
-Role Name
-=========
+# Ansible Role: telegraf
 
-A brief description of the role goes here.
+Installs and configures the Telegraf agent for collecting and shipping metrics.
 
-Requirements
-------------
+## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Ansible ≥ 2.9
+- Supported OS: Debian, Ubuntu, RHEL/CentOS/Rocky
 
-Role Variables
---------------
+## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+You **must** declare the following variables either in your playbook or in your inventory:
 
-Dependencies
-------------
+```yaml
+telegraf_urls:
+  - "URL1:PORT1"
+telegraf_organization: "ORG1"
+telegraf_bucket: "BUCKET1"
+telegraf_precision: "s"
+telegraf_input_systems_net_interfaces:
+  - "lo"
+  - "INT1"
+```
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+The `vault_telegraf_token` (InfluxDB auth token) can be stored in an Ansible Vault file or set as an environment variable:
 
-Example Playbook
-----------------
+```bash
+export vault_telegraf_token="YOUR_TOKEN"
+```
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+## Example Playbook
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+```yaml
+- hosts: all
+  roles:
+    - role: sxravan.ansible-role-telegraf
+      vars:
+        telegraf_urls:
+          - "https://influxdb.example.com:8086"
+        telegraf_organization: "my-org"
+        telegraf_bucket: "metrics"
+        telegraf_precision: "s"
+        telegraf_input_systems_net_interfaces:
+          - "lo"
+          - "eth0"
+        vault_telegraf_token: "YOUR_TOKEN"
+```
