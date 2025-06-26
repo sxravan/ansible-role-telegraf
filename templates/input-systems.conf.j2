@@ -6,8 +6,22 @@
 
 [[inputs.disk]]
   ## collect all disks
-  mount_points = ["/"]
+  mount_points = {{ telegraf_input_systems_disk_mount_points }}
   ignore_fs = ["tmpfs", "devtmpfs"]
 
 [[inputs.net]]
   interfaces = {{ telegraf_input_systems_net_interfaces }}
+
+[[inputs.netstat]]
+  ## By default, telegraf will not collect any netstat stats.
+  ## Set to true to enable collection of netstat stats.
+  enabled = {{ telegraf_input_systems_netstat_enabled }}
+
+[[inputs.system]]
+  ## Collect system load and uptime
+  collect_load = true
+  collect_uptime = true
+
+[[inputs.processes]]
+  ## Collect process metrics
+  fieldpass = ["pid", "user", "name", "state", "nice", "priority", "rss", "vsz"]

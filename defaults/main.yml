@@ -13,3 +13,8 @@ telegraf_rpm_repo_baseurl: "https://repos.influxdata.com/rhel/{{ ansible_distrib
 telegraf_package:
   - telegraf
 telegraf_service: telegraf
+
+# Configurations
+telegraf_input_systems_disk_mount_points:
+  - /
+telegraf_input_systems_netstat_enabled: true
